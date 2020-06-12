@@ -1,0 +1,20 @@
+server:
+  port: 9999
+  servlet:
+    context-path: /shiro
+    jsp:
+      init-parameters:
+        development: true
+spring:
+  mvc:
+    view:
+      prefix: /
+      suffix: .jsp
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/shiro
+    username: root
+    password: root
+mybatis:
+  type-aliases-package: com.baizhi.zq.entity
+  mapper-locations: classpath:com/baizhi/zq/mapper/*Mapper.xml

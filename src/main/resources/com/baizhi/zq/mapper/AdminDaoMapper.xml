@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.zq.dao.AdminDao">
+    <resultMap id="queryMap" type="Admin">
+        <id column="aAdminId" property="adminId"/>
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="salt" property="salt" />
+        <collection property="roles" ofType="Role" >
+            <id column="rRoleId" property="roleId"/>
+            <result column="rRoleName" property="roleName" />
+            <collection property="authorities" ofType="Authority">
+                <id column="auAuthorityId" property="authorityId"/>
+                <result column="auAuthorityName" property="authorityName" />
+            </collection>
+        </collection>
+    </resultMap>
+
+    <!--根据用户名查询用户s-->
+    <select id="queryByUsernames" resultMap="queryMap">
+        select
+            a.admin_id aAdminId,a.username username,a.password password,a.salt salt,
+            r.role_id rRoleId,r.role_name rRoleName,
+            au.authority_id auAuthorityId,au.authority_name auAuthorityName
+        from s_admin a
+        left join s_admin_role ar on a.admin_id=ar.admin_id
+        left join s_role r on ar.role_id=r.role_id
+        left join s_role_authority ra on r.role_id=ra.role_id
+        left join s_authority au on ra.authority_id=au.authority_id
+        where username=#{username}
+    </select>
+
+    <sql id="querySql">
+        admin_id adminId,username,password,salt
+    </sql>
+
+    <!--根据用户名查询用户-->
+    <select id="queryByUsername" resultType="Admin">
+        select <include refid="querySql"/> from s_admin where username=#{username}
+    </select>
+
+
+</mapper>
